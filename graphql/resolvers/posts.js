@@ -1,16 +1,17 @@
 import postModel from "../../models/Post.js";
+import checkAuth from "../../utils/check-auth.js";
 
 const resolvers = {
   Query: {
     async getPosts() {
       try {
-        const posts = await postModel.find();
+        const posts = await postModel.find().sort({ createdAt: -1 });
         return posts;
       } catch (error) {
         throw new Error(error);
       }
     },
-    async getPost(_, { postId }) {
+    async getPost(_, { postId }, context, info) {
       try {
         const post = await postModel.findById(postId);
         if (post) return post;
@@ -20,6 +21,19 @@ const resolvers = {
       } catch (error) {
         throw new Error(error);
       }
+    },
+  },
+  Mutation: {
+    async createPost(_, { body }, context) {
+      const user = checkAuth(context);
+      const newPost = new postModel({
+        body,
+        user: user.id,
+        username: user.username,
+        createdAt: new Date().toISOString(),
+      });
+      const post = await newPost.save();
+      return post;
     },
   },
 };
