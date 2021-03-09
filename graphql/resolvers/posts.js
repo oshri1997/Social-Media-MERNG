@@ -27,6 +27,11 @@ const resolvers = {
   Mutation: {
     async createPost(_, { body }, context) {
       const user = checkAuth(context);
+
+      if (body.trim() === "") {
+        throw new Error("Post body must not be empty");
+      }
+
       const newPost = new postModel({
         body,
         user: user.id,
