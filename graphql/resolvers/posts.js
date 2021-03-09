@@ -1,4 +1,4 @@
-import { AuthenticationError } from "apollo-server-errors";
+import { AuthenticationError, UserInputError } from "apollo-server-errors";
 import postModel from "../../models/Post.js";
 import checkAuth from "../../utils/check-auth.js";
 
@@ -48,6 +48,26 @@ const resolvers = {
         }
       } catch (error) {
         throw new Err(error);
+      }
+    },
+    async likePost(_, { postId }, context) {
+      const { username } = checkAuth(context);
+      const post = await postModel.findById(postId);
+      if (post) {
+        if (post.likes.find((like) => like.username === username)) {
+          //post already likes,unlike
+          post.likes = post.likes.filter((like) => like.username !== username);
+        } else {
+          //like this post
+          post.likes.push({
+            username,
+            createdAt: new Date().toISOString(),
+          });
+        }
+        await post.save();
+        return post;
+      } else {
+        throw new UserInputError("Post not found");
       }
     },
   },
