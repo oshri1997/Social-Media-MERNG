@@ -28,12 +28,12 @@ const resolvers = {
       }
       const user = await userModel.findOne({ username });
       if (!user) {
-        errors.genral = "User not found";
+        errors.general = "User not found";
         throw new UserInputError("User not found", { errors });
       }
       const match = await bcrypt.compare(password, user.password);
       if (!match) {
-        errors.genral = "Wrong crendetials";
+        errors.general = "Wrong crendetials";
         throw new UserInputError("Wrong crendetials", { errors });
       }
       const token = genrateToken(user);
