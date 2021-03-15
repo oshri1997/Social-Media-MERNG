@@ -1,6 +1,11 @@
 import React from "react";
 import "./App.css";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+} from "react-router-dom";
 import "semantic-ui-css/semantic.min.css";
 import { AuthProvider } from "./context/auth";
 import Login from "./pages/Login";
@@ -16,9 +21,12 @@ function App() {
       <Router>
         <Container>
           <MenuBar />
-          <Route exact path="/" component={Home} />
-          <AuthRoute exact path="/login" component={Login} />
-          <AuthRoute exact path="/register" component={Register} />
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <AuthRoute exact path="/login" component={Login} />
+            <AuthRoute exact path="/register" component={Register} />
+            {/* <Redirect to="/" /> */}
+          </Switch>
         </Container>
       </Router>
     </AuthProvider>
