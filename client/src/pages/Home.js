@@ -7,7 +7,7 @@ import PostForm from "../components/PostForm";
 import { FETCH_POSTS_QUERY } from "../graphql";
 
 const Home = () => {
-  const { loading, data } = useQuery(FETCH_POSTS_QUERY);
+  const { loading, data: { getPosts } = {} } = useQuery(FETCH_POSTS_QUERY);
   const { user } = useContext(AuthContext);
   return (
     <Grid columns={3} divided>
@@ -24,8 +24,8 @@ const Home = () => {
           <h1>loading posts...</h1>
         ) : (
           <Transition.Group>
-            {data &&
-              data.getPosts.map((post) => (
+            {getPosts &&
+              getPosts.map((post) => (
                 <Grid.Column key={post.id} style={{ marginBottom: 20 }}>
                   <PostCard post={post} />
                 </Grid.Column>
