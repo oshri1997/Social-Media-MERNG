@@ -14,6 +14,7 @@ import Register from "./pages/Register";
 import MenuBar from "./components/MenuBar";
 import { Container } from "semantic-ui-react";
 import AuthRoute from "./AuthRoute";
+import SinglePost from "./components/SinglePost";
 
 function App() {
   return (
@@ -23,9 +24,10 @@ function App() {
           <MenuBar />
           <Switch>
             <Route exact path="/" component={Home} />
-            <AuthRoute exact path="/login" component={Login} />
-            <AuthRoute exact path="/register" component={Register} />
-            {/* <Redirect to="/" /> */}
+            <AuthRoute path="/login" component={Login} />
+            <AuthRoute path="/register" component={Register} />
+            <Route path="/posts/:postId" component={SinglePost} />
+            <Redirect to="/" />
           </Switch>
         </Container>
       </Router>
