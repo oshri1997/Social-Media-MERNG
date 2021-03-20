@@ -1,105 +1,64 @@
-import { gql, useMutation } from "@apollo/client";
 import React, { useState } from "react";
-<<<<<<< HEAD
-import { Button, Confirm, Icon, Popup } from "semantic-ui-react";
-import { FETCH_POSTS_QUERY } from "../graphql";
 
-const DeleteButton = ({ postId, callback, commentId }) => {
-  const [confirmOpen, setConfrimOpen] = useState(false);
-  const dynamicMutation = commentId ? DELETE_COMMENT : DELETE_POST;
-  const [deletePostOrComment] = useMutation(dynamicMutation, {
-    variables: {
-      postId,
-      commentId,
-    },
+import { useMutation, gql } from "@apollo/client";
+import { Button, Confirm, Icon, Popup } from "semantic-ui-react";
+
+import { FETCH_POSTS_QUERY } from "../graphql";
+function DeleteButton({ postId, commentId, callback }) {
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const mutation = commentId ? DELETE_COMMENT_MUTATION : DELETE_POST_MUTATION;
+
+  const [deletePostOrMutation] = useMutation(mutation, {
     update(proxy) {
-      setConfrimOpen(false);
+      setConfirmOpen(false);
       if (!commentId) {
         const data = proxy.readQuery({
           query: FETCH_POSTS_QUERY,
         });
-        let copyData = data.getPosts;
-        copyData = data.getPosts.filter((post) => postId !== post.id);
-        proxy.writeQuery({
-          query: FETCH_POSTS_QUERY,
-          data: {
-            getPosts: [...copyData],
-          },
-        });
+        data.getPosts = data.getPosts.filter((p) => p.id !== postId);
+        proxy.writeQuery({ query: FETCH_POSTS_QUERY, data });
       }
-=======
-import { Button, Confirm, Icon } from "semantic-ui-react";
-import { FETCH_POSTS_QUERY } from "../graphql";
-
-const DeleteButton = ({ postId, callback }) => {
-  const [confirmOpen, setConfrimOpen] = useState(false);
-  const [deletePost] = useMutation(DELETE_POST, {
+      if (callback) callback();
+    },
     variables: {
       postId,
-    },
-    update(proxy) {
-      setConfrimOpen(false);
-      const data = proxy.readQuery({
-        query: FETCH_POSTS_QUERY,
-      });
-      let copyData = data.getPosts;
-      copyData = data.getPosts.filter((post) => postId !== post.id);
-      proxy.writeQuery({
-        query: FETCH_POSTS_QUERY,
-        data: {
-          getPosts: [...copyData],
-        },
-      });
->>>>>>> 3de86e17cf29e8507c181261a43666c0e1c133a4
-      if (callback) callback();
+      commentId,
     },
   });
   return (
     <>
-<<<<<<< HEAD
       <Popup
-        content={commentId ? "Delete comment" : "Delete Post"}
         inverted
+        content={commentId ? "Delete comment" : "Delete post"}
         trigger={
           <Button
             as="div"
             color="red"
-            onClick={() => setConfrimOpen(true)}
             floated="right"
+            onClick={() => setConfirmOpen(true)}
           >
-            <Icon style={{ margin: 0 }} name="trash" />
+            <Icon name="trash" style={{ margin: 0 }} />
           </Button>
         }
       />
+
       <Confirm
         open={confirmOpen}
-        onCancel={() => setConfrimOpen(false)}
-        onConfirm={deletePostOrComment}
-=======
-      <Button
-        as="div"
-        color="red"
-        onClick={() => setConfrimOpen(true)}
-        floated="right"
-      >
-        <Icon style={{ margin: 0 }} name="trash" />
-      </Button>
-      <Confirm
-        open={confirmOpen}
-        onCancel={() => setConfrimOpen(false)}
-        onConfirm={deletePost}
->>>>>>> 3de86e17cf29e8507c181261a43666c0e1c133a4
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={deletePostOrMutation}
       />
     </>
   );
-};
-const DELETE_POST = gql`
+}
+
+const DELETE_POST_MUTATION = gql`
   mutation deletePost($postId: ID!) {
     deletePost(postId: $postId)
   }
 `;
-<<<<<<< HEAD
-const DELETE_COMMENT = gql`
+
+const DELETE_COMMENT_MUTATION = gql`
   mutation deleteComment($postId: ID!, $commentId: ID!) {
     deleteComment(postId: $postId, commentId: $commentId) {
       id
@@ -113,7 +72,5 @@ const DELETE_COMMENT = gql`
     }
   }
 `;
-=======
->>>>>>> 3de86e17cf29e8507c181261a43666c0e1c133a4
 
 export default DeleteButton;
