@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useContext, useRef, useState } from "react";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import {
@@ -9,6 +10,11 @@ import {
   Image,
   Label,
 } from "semantic-ui-react";
+=======
+import React, { useContext } from "react";
+import { useQuery, gql } from "@apollo/client";
+import { Button, Card, Grid, Icon, Image, Label } from "semantic-ui-react";
+>>>>>>> 3de86e17cf29e8507c181261a43666c0e1c133a4
 import moment from "moment";
 import LikeButton from "./LikeButton";
 import { AuthContext } from "../context/auth";
@@ -17,13 +23,17 @@ import DeleteButton from "./DeleteButton";
 const SinglePost = (props) => {
   const postId = props.match.params.postId;
   const { user } = useContext(AuthContext);
+<<<<<<< HEAD
   const [comment, setComment] = useState("");
   const commentInputRef = useRef(null);
+=======
+>>>>>>> 3de86e17cf29e8507c181261a43666c0e1c133a4
 
   const deletePostCallback = () => {
     props.history.push("/");
   };
 
+<<<<<<< HEAD
   const [createComment] = useMutation(CREATE_COMMENT, {
     variables: { postId, body: comment },
     update() {
@@ -32,6 +42,8 @@ const SinglePost = (props) => {
     },
   });
 
+=======
+>>>>>>> 3de86e17cf29e8507c181261a43666c0e1c133a4
   const { data: { getPost } = {} } = useQuery(GET_SINGLE_POST, {
     variables: {
       postId,
@@ -88,6 +100,7 @@ const SinglePost = (props) => {
                 )}
               </Card.Content>
             </Card>
+<<<<<<< HEAD
             {user && (
               <Card fluid>
                 <Card.Content>
@@ -135,12 +148,15 @@ const SinglePost = (props) => {
             ) : (
               <h3>Be the first one to comment!</h3>
             )}
+=======
+>>>>>>> 3de86e17cf29e8507c181261a43666c0e1c133a4
           </Grid.Column>
         </Grid.Row>
       </Grid>
     );
     return postMarkup;
   }
+<<<<<<< HEAD
   return <div>singlePost</div>;
 };
 
@@ -158,6 +174,11 @@ const CREATE_COMMENT = gql`
     }
   }
 `;
+=======
+
+  return <div>SinglePost</div>;
+};
+>>>>>>> 3de86e17cf29e8507c181261a43666c0e1c133a4
 
 const GET_SINGLE_POST = gql`
   query getPost($postId: ID!) {

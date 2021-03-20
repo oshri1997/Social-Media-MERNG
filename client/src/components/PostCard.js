@@ -27,6 +27,7 @@ const PostCard = ({
       </Card.Content>
       <Card.Content extra>
         <LikeButton user={user} post={{ id, likes, likeCount }} />
+<<<<<<< HEAD
         <Popup
           inverted
           content="Comment on post"
@@ -41,6 +42,16 @@ const PostCard = ({
             </Button>
           }
         />
+=======
+        <Button labelPosition="right" as={Link} to={`posts/${id}`}>
+          <Button basic color="blue">
+            <Icon name="comments" />
+          </Button>
+          <Label basic color="blue" pointing="left">
+            {commentCount}
+          </Label>
+        </Button>
+>>>>>>> 3de86e17cf29e8507c181261a43666c0e1c133a4
         {user && user.username === username && <DeleteButton postId={id} />}
       </Card.Content>
     </Card>
